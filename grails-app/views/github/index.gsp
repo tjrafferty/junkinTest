@@ -1,112 +1,93 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta name="layout" content="main"/>
-		<title>Github Public Repos</title>
-		<style type="text/css" media="screen">
-			#status {
-				background-color: #eee;
-				border: .2em solid #fff;
-				margin: 2em 2em 1em;
-				padding: 1em;
-				width: 54em;
-				float: left;
-				-moz-box-shadow: 0px 0px 1.25em #ccc;
-				-webkit-box-shadow: 0px 0px 1.25em #ccc;
-				box-shadow: 0px 0px 1.25em #ccc;
-				-moz-border-radius: 0.6em;
-				-webkit-border-radius: 0.6em;
-				border-radius: 0.6em;
-			}
+<head>
+    <meta name="layout" content="base"/>
+    <title>Github Thingamajig | Junkin</title>
+    <meta name="description"
+          content="Thingamajig is a noun used to refer to or address a person or thing whose name one has forgotten, does not know, or does not wish to mention.">
 
-			.ie6 #status {
-				display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
-			}
+</head>
 
-			#status ul {
-				font-size: 0.9em;
-				list-style-type: none;
-				margin-bottom: 0.6em;
-				padding: 0;
-			}
+<body data-page="home">
+<header><h1>Thingamajig</h1>
 
-			#status li {
-				line-height: 1.3;
-			}
+    <p>"one of those thingamajigs for keeping all the fireplace tools together"</p></header>
 
-			#status h1 {
-				text-transform: uppercase;
-				font-size: 1.1em;
-				margin: 0 0 0.3em;
-			}
+<div class="container">
+    <h2><span class="fa fa-github fa-1x"></span>&nbsp;Github Repos</h2>
 
-			#page-body {
-				margin: 2em 1em 1.25em 18em;
-			}
+    <p>View the top rated repos on Github and their latest commits.</p>
 
-			h2 {
-				margin-top: 1em;
-				margin-bottom: 0.3em;
-				font-size: 1em;
-			}
+    <div class="row">
+        <div class="col-sm-3">
+            <ul class="list-group">
+                <li class="list-group-item text-muted" contenteditable="false">Title</span>
+                </li>
+                <li class="list-group-item flex space-between">
+                    <strong class="">Date</strong>
+                    <span class="text-right number">
+                        <g:formatDate date="${new Date()}" type="datetime" style="MEDIUM" timeStyle="SHORT"/>
+                    </span>
+                </li>
+                <li class="list-group-item flex space-between">
+                    <strong class="">Something</strong>
+                    <span class="text-right">
+                        Foo
+                    </span>
+                </li>
 
-			p {
-				line-height: 1.5;
-				margin: 0.25em 0;
-			}
+                <li class="list-group-item flex space-between">
+                    <strong>Something Else</strong>
+                    <span class="text-right">
+                        Bar
+                    </span>
+                </li>
 
-			#controller-list ul {
-				list-style-position: inside;
-			}
+            </ul>
 
-			#controller-list li {
-				line-height: 1.3;
-				list-style-position: inside;
-				margin: 0.25em 0;
-			}
+            <ul class="list-group">
+                <li class="list-group-item text-muted" contenteditable="false">Title</span>
+                </li>
+                <li class="list-group-item flex space-between">
+                    <strong class="">Date</strong>
+                    <span class="text-right number">
+                        <g:formatDate date="${new Date()}" type="datetime" style="MEDIUM" timeStyle="SHORT"/>
+                    </span>
+                </li>
+                <li class="list-group-item flex space-between">
+                    <strong class="">Something</strong>
+                    <span class="text-right">
+                        Foo
+                    </span>
+                </li>
 
-			@media screen and (max-width: 480px) {
-				#status {
-					display: none;
-				}
+                <li class="list-group-item flex space-between">
+                    <strong>Something Else</strong>
+                    <span class="text-right">
+                        Bar
+                    </span>
+                </li>
 
-				#page-body {
-					margin: 0 1em 1em;
-				}
+            </ul>
+        </div>
 
-				#page-body h1 {
-					margin-top: 0;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<div id="status" role="complementary">
-            <div id="controller-list" role="navigation">
-			<h1>Public Github Repos</h1>
-			<p>
-                %{--<%=--}%
-                    %{--json.each { Map it ->--}%
-                        %{--out << "<p>${it.full_name} ${it.description} ${it.html_url} ${it.url} ${it.type} ${it.fork}</p>"--}%
-                    %{--}--}%
-                 %{--%>--}%
-            <g:each in="${json}">
-                <h2>${it.full_name}</h2>
-                ${it.description}<br/>
-                <a href="${it.url}">${it.html_url}</a><br/>
-                Latest commit: ${it.lastCommit}<br/>
-            </g:each>
-            </p>
+        <div class="col-sm-9">
+            <div class="top-repos-list-container">
+                <h3><span
+                        class="fa fa-bar-chart-o fa-1x">&nbsp;Top Rated Java Repos (${repos.size() + " of " + reposTotal})</span>
+                </h3>
+
+                <g:render template="/templates/repos/list"/>
             </div>
+            <hr/>
 
-			%{--<div id="controller-list" role="navigation">--}%
-				%{--<h2>Available Controllers:</h2>--}%
-				%{--<ul>--}%
-					%{--<g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName } }">--}%
-						%{--<li class="controller"><g:link controller="${c.logicalPropertyName}">${c.fullName}</g:link></li>--}%
-					%{--</g:each>--}%
-				%{--</ul>--}%
-			%{--</div>--}%
-		</div>
-	</body>
+            <div class="other-repos-list-container">
+                <h3><span class="fa fa-star fa-1x">&nbsp;Other</span></h3>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
 </html>

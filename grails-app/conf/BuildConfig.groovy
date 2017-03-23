@@ -49,6 +49,8 @@ grails.project.dependency.resolution = {
 
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
+        runtime 'mysql:mysql-connector-java:5.1.33'
+        compile 'com.github.sommeri:less4j:1.10.0'
         // runtime 'mysql:mysql-connector-java:5.1.27'
         // runtime 'org.postgresql:postgresql:9.3-1100-jdbc41'
     }
@@ -58,29 +60,22 @@ grails.project.dependency.resolution = {
         build ":tomcat:7.0.53"
 
         // plugins for the compile step
-        compile ":scaffolding:2.0.3"
-        compile ':cache:1.1.2'
+        compile ":scaffolding:2.1.2"
+        compile ":cache:1.1.8"
+        compile ":asset-pipeline:2.9.1"
+        compile(":less-asset-pipeline:2.9.1") {
+            excludes "less4j"
+        }
         compile ":rest:0.8"
         compile "org.grails.plugins:rest-client-builder:2.1.1"
         compile "org.grails.plugins:remote-control:2.0"
         compile ":functional-test:2.0.0"
+
         // plugins needed at runtime but not for compilation
         runtime ":hibernate:3.6.10.15" // or ":hibernate4:4.3.5.2"
         runtime ":database-migration:1.4.0"
         runtime ":jquery:1.11.1"
-        runtime ":resources:1.2.7"
-        // Uncomment these (or add new ones) to enable additional resources capabilities
-        //runtime ":zipped-resources:1.0.1"
-        //runtime ":cached-resources:1.1"
-        //runtime ":yui-minify-resources:0.1.5"
-
-        // An alternative to the default resources plugin is the asset-pipeline plugin
-        //compile ":asset-pipeline:1.6.1"
-
-        // Uncomment these to enable additional asset-pipeline capabilities
-        //compile ":sass-asset-pipeline:1.5.5"
-        //compile ":less-asset-pipeline:1.5.3"
-        //compile ":coffee-asset-pipeline:1.5.0"
-        //compile ":handlebars-asset-pipeline:1.3.0.1"
+        runtime ":font-awesome-resources:4.3.0.2"
+        runtime ":twitter-bootstrap:3.3.5"
     }
 }

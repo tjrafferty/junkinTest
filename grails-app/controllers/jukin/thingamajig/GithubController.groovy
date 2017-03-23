@@ -1,44 +1,89 @@
 package jukin.thingamajig
 
-import groovy.json.JsonSlurper
+import groovyx.net.http.ContentType
 
 class GithubController {
 
+    def feedService
 
+    def index() {
+        def rtn = [:], opts = [:], repos = []
+        opts.url = "http://api.github.com"
+        opts.path = "/search/repositories"
+        def addParams = [
+                access_token: grailsApplication.config.github.accessToken,
+                sort    : 'stars',
+                order   : 'desc',
+                per_page: 20
+        ]
+        def searchQuery = [
+                language: "java"
+        ]
+        opts.query = [q: searchQuery] + addParams
+        opts.contentType = ContentType.JSON
+        def response = feedService.getFeed(opts)
+        def reposTotal = response.total_count
 
-    def index = {
-        render "<H1>Hello World</H1>"
-    }
-
-//    def list = {
-    public def list() {
-//        render "${params.id ?: 'what?'}"
-        def accessToken='f0c3134e73eef152ae784ccab218cc2935319fd3'
-        def text = queryGit("https://api.github.com/repositories?access_token=${accessToken}")
-        assert text : "whoa no github result"
-        def reposJson = new JsonSlurper().parseText(text)
-
-        def model =[json:reposJson]
-
-        def lastCommitForRepo=[:]
-        reposJson.each { Map map ->
-
-
-            def full_name = map.full_name
-//            def url = "https://api.github.com/repos/${full_name}/commits"
-            // rate limiting
-            def url = "https://api.github.com/repos/${full_name}/commits?access_token=${accessToken}"
+        response.items.each { repo ->
+            //opts.path = "/repos/${repo.owner.login}/${repo.name}/commits/git/refs/heads/master"
+            //opts.query = [:]
+            //def commits = feedService.getFeed(opts)
+            //repo.lastCommit = commits[0]
+/*
+            def url = "https://api.github.com/repos/${repo.owner.login}/${repo.name}/commits"
             def newTExt = queryGit(url)
             if (newTExt) {
-                def newReposJson = new JsonSlurper().parseText(newTExt)
-
-                map.put 'lastCommit', ((newReposJson as List)[0] as Map).commit.author.date
+                def commits = new JsonSlurper().parseText(newTExt)
+                repo.lastCommit = commits[0]
+                println commits[0]//'lastCommit', ((newReposJson as List)[0] as Map).commit.author.date
             }
+*/
 
+            repos << repo
         }
-        model.put 'lastCommitForRepo', lastCommitForRepo
 
-        render(view: 'index', model:model, contentType: 'text/html')
+        rtn.repos = repos
+        rtn.reposTotal = reposTotal
+
+        return rtn
+    }
+
+    def vote(){
+
+    }
+
+    def comment(){
+
+    }
+
+
+    def list() {
+        def rtn = [:], opts = [:], repos = []
+        opts.url = "http://api.github.com"
+        opts.path = "/search/repositories"
+        def addParams = [
+                //access_token: grailsApplication.config.github.accessToken,
+                sort    : 'stars',
+                order   : params.order ?: 'desc',
+                per_page: params.perPage ?: 20
+        ]
+        def searchQuery = [
+                language: "java"
+        ]
+        opts.query = [q: searchQuery] + addParams
+        opts.contentType = ContentType.JSON
+        def response = feedService.getFeed(opts)
+        def reposTotal = response.total_count
+
+        response.items.each { repo ->
+            println response
+
+            repos << repo
+        }
+
+        rtn.repos = repos
+        rtn.reposTotal = reposTotal
+        render template: '/templates/repos/list', model: rtn
 
     }
 
@@ -54,7 +99,7 @@ class GithubController {
             url = new URL(urlToRead);
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
-             rd = new BufferedReader(new InputStreamReader(conn.getInputStream() ) );
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             while ((line = rd.readLine()) != null) {
                 result += line;
             }
