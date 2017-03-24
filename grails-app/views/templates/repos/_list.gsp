@@ -1,32 +1,49 @@
 <div class="repos-container">
     <ul>
         <g:each in="${repos}" var="repo" status="idx">
-            <li class="repo-data" data-id="${repo.id}">
-                <h4>${repo.full_name} <span class="fa fa-star">&nbsp;${repo.stargazers_count}</span></h4>
+            <li class="repo-data" data-id="${repo.id}" data-owner="${repo.owner.login}" data-name="${repo.name}">
+                <div class="flex space-between">
+                    <h4>${repo.full_name} <span class="fa fa-star">&nbsp;${repo.stargazers_count}</span></h4>
+                    <button type="button" class="btn btn-info" data-toggle="modal"
+                            data-target="#voteModal">Vote</button>
+                </div>
 
                 <p>${thinga.truncateHtml(value: repo.description, length: '250')}"</p>
 
                 <p><g:link uri="${repo.url}" target="_blank">${repo.owner.html_url}</g:link></p>
-                <%--<p>Latest commit: ${repo.lastCommit}</p>--%>
 
+                <p>Latest commit: <span class="latest-commit">
+                    <button class="btn btn-default btn-outline btn-xs show-commit btn-loading"
+                            data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Searching">SHOW</button>
+                </span></p>
 
-                <div class="voters">
-                    <button class="vote-button down btn btn-danger btn-sm">
-                        <span class="fa fa-thumbs-up"></span> Down Vote
-                    </button>
+                <p data-toggle="collapse" data-target="#comments-${idx}">Comments&nbsp;<span
+                        class="fa fa-plus-square-o"></span></p>
 
-                    <button class="vote-button up btn btn-info btn-sm">
-                        <span class="fa fa-thumbs-down"></span> Up Vote
-                    </button>
+                <div id="comments-${idx}" class="collapse">
+                    <ul class="votes-list">
+                        <g:if test="${repo.votes}">
+                            <g:each in="${repo.votes}" var="vote">
+                                <li>
+                                    <p>
+                                        <g:if test="${vote.vote == 1}">
+                                            <span class="fa fa-thumbs-up green"></span>
+                                        </g:if>
+                                        <g:elseif test="${vote.vote == -1}">
+                                            <span class="fa fa-thumbs-down red"></span>
+                                        </g:elseif>
+                                        ${vote.comments ?: 'No need to comment my thumb says it all ;-)'}
+                                    </p>
+                                </li>
+                            </g:each>
+                        </g:if>
+                        <g:else>
+                            <li class="no-vote">
+                                <p>Currently there are no votes. Click here to <g:link uri="#" data-toggle="modal" data-target="#voteModal">add vote</g:link>.</p>
+                            </li>
+                        </g:else>
+                    </ul>
                 </div>
-
-                <g:form name="repo-comment-form" class="repo-comment-form" controller="github" action="postComments">
-                    <div class="form-group">
-                        <textarea class="form-control comments" placeholder="Tell us what you think" rows="7" cols="50"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </g:form>
-
             </li>
 
         </g:each>

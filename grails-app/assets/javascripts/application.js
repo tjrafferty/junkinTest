@@ -30,5 +30,14 @@ console.log("\\____/ \\____/ |_| \\_|_|\\_\\_____|_| \\_|");
 
 
 $(document).ready(function () {
-
+    //Button loading events
+    $(document).on('click', '.btn-loading', function () {
+        var $this = $(this);
+        $this.button('loading');
+        $('input').blur(function (event) {
+            event.target.checkValidity();
+        }).bind('invalid', function (event) {
+            $this.button('reset');
+        });
+    });
 });

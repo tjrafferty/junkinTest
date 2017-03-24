@@ -10,6 +10,7 @@ class UrlMappings {
         }
 
         "/"(controller: "github", action: "index")
+        "/latestCommit"(controller: "github", action: "getLatestCommit")
 
         //ERROR Handling
         "403"(controller: "error", action: "error403", exception: AccessDeniedException)

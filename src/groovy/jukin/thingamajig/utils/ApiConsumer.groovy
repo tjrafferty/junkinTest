@@ -16,7 +16,6 @@ class ApiConsumer {
                 uri.path = path
                 uri.query = query
                 headers.'User-Agent' = 'Jukin-Thingamajig'
-                println "URI " + uri
                 response.success = { resp, reader ->
                     ret = reader
                 }

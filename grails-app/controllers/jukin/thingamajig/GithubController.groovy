@@ -1,23 +1,27 @@
 package jukin.thingamajig
 
+import grails.converters.JSON
 import groovyx.net.http.ContentType
+import junkin.thingamajig.Repo
+import junkin.thingamajig.Vote
 
 class GithubController {
 
     def feedService
+    def quoteService
 
     def index() {
         def rtn = [:], opts = [:], repos = []
         opts.url = "http://api.github.com"
         opts.path = "/search/repositories"
         def addParams = [
-                access_token: grailsApplication.config.github.accessToken,
+                //access_token: grailsApplication.config.github.accessToken,
                 sort    : 'stars',
                 order   : 'desc',
                 per_page: 20
         ]
         def searchQuery = [
-                language: "java"
+                is: "public"
         ]
         opts.query = [q: searchQuery] + addParams
         opts.contentType = ContentType.JSON
@@ -25,95 +29,55 @@ class GithubController {
         def reposTotal = response.total_count
 
         response.items.each { repo ->
-            //opts.path = "/repos/${repo.owner.login}/${repo.name}/commits/git/refs/heads/master"
-            //opts.query = [:]
-            //def commits = feedService.getFeed(opts)
-            //repo.lastCommit = commits[0]
-/*
-            def url = "https://api.github.com/repos/${repo.owner.login}/${repo.name}/commits"
-            def newTExt = queryGit(url)
-            if (newTExt) {
-                def commits = new JsonSlurper().parseText(newTExt)
-                repo.lastCommit = commits[0]
-                println commits[0]//'lastCommit', ((newReposJson as List)[0] as Map).commit.author.date
+            def id = repo.id
+            def repository = Repo.findByRepoId(id)
+            if (repository) {
+                repo.votes = repository.votes
+            } else {
+                repo.votes = null
             }
-*/
 
             repos << repo
         }
-
+        rtn.randomQuote = quoteService.getRandomQuote()
         rtn.repos = repos
         rtn.reposTotal = reposTotal
 
         return rtn
     }
 
-    def vote(){
+    def vote() {
+        def rtn = [success: false]
+        def vote = new Vote(comments: params.comments, vote: params.vote)
+        def repo = Repo.findByName(params.name)
+        if (!repo) {
+            repo = new Repo(name: params.name, repoId: params.id).save(flush: true)
+        }
+        repo.addToVotes(vote)
+        if (repo.save(flush: true)) {
+            rtn.id = repo.repoId
+            rtn.vote = vote
+            rtn.success = true
+        }
 
+        render rtn as JSON
     }
 
-    def comment(){
-
-    }
-
-
-    def list() {
-        def rtn = [:], opts = [:], repos = []
+    def getLatestCommit() {
+        def rtn = [:], opts = [:]
         opts.url = "http://api.github.com"
-        opts.path = "/search/repositories"
-        def addParams = [
-                //access_token: grailsApplication.config.github.accessToken,
-                sort    : 'stars',
-                order   : params.order ?: 'desc',
-                per_page: params.perPage ?: 20
-        ]
-        def searchQuery = [
-                language: "java"
-        ]
-        opts.query = [q: searchQuery] + addParams
+        opts.path = "/repos/${params.owner}/${params.name}/commits"
+        opts.query = [:]
         opts.contentType = ContentType.JSON
-        def response = feedService.getFeed(opts)
-        def reposTotal = response.total_count
+        def commits = feedService.getFeed(opts)
+        def lastCommit = commits[0]
+        def commitUrl = lastCommit.html_url
+        def date = lastCommit.commit.author.date
+        def sha = lastCommit.sha
 
-        response.items.each { repo ->
-            println response
+        rtn.commit = "<span>" + date + "&nbsp;<a href='" + commitUrl + "' target='_blank'>" + sha + "</a></span>"
 
-            repos << repo
-        }
-
-        rtn.repos = repos
-        rtn.reposTotal = reposTotal
-        render template: '/templates/repos/list', model: rtn
-
-    }
-
-    public static def queryGit(String urlToRead) {
-
-        URL url;
-
-        HttpURLConnection conn;
-        BufferedReader rd;
-        String line;
-        String result = "";
-        try {
-            url = new URL(urlToRead);
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            while ((line = rd.readLine()) != null) {
-                result += line;
-            }
-            rd.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-        return result
+        render rtn as JSON
     }
 
 

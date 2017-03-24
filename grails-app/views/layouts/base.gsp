@@ -35,9 +35,6 @@
         <g:layoutBody/>
     </main>
 
-    <%-- Render Footer --%>
-    <g:render template="/templates/footer"/>
-
 </div>
 </body>
 </html>

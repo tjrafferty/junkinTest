@@ -98,8 +98,9 @@ grails.hibernate.osiv.readonly = false
 
 environments {
     development {
+        grails.plugin.seed.autoSeed = true
         grails.logging.jul.usebridge = true
-        github.accessToken = "d318348158e0d012313d3d45f1c45ac272400ea9"
+        //github.accessToken = "d318348158e0d012313d3d45f1c45ac272400ea9"
     }
     production {
         grails.logging.jul.usebridge = false

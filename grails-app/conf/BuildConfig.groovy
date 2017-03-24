@@ -70,6 +70,7 @@ grails.project.dependency.resolution = {
         compile "org.grails.plugins:rest-client-builder:2.1.1"
         compile "org.grails.plugins:remote-control:2.0"
         compile ":functional-test:2.0.0"
+        compile "org.grails.plugins:seed-me:0.7.2"
 
         // plugins needed at runtime but not for compilation
         runtime ":hibernate:3.6.10.15" // or ":hibernate4:4.3.5.2"

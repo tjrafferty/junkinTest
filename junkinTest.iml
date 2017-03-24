@@ -117,5 +117,6 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="junkinTest-grailsPlugins" />
+    <orderEntry type="library" name="grails-2.5.1" level="application" />
   </component>
 </module>
