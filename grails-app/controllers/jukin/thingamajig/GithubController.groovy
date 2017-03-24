@@ -2,8 +2,8 @@ package jukin.thingamajig
 
 import grails.converters.JSON
 import groovyx.net.http.ContentType
-import junkin.thingamajig.Repo
-import junkin.thingamajig.Vote
+import jukin.thingamajig.Repo
+import jukin.thingamajig.Votes
 
 class GithubController {
 
@@ -48,7 +48,7 @@ class GithubController {
 
     def vote() {
         def rtn = [success: false]
-        def vote = new Vote(comments: params.comments, vote: params.vote)
+        def vote = new Votes(comment: params.comment, voteValue: params.voteValue, repoUrl: params.repoUrl, name: params.name)
         def repo = Repo.findByName(params.name)
         if (!repo) {
             repo = new Repo(name: params.name, repoId: params.id).save(flush: true)

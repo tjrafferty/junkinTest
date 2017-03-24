@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="base"/>
-    <title>Github Thingamajig | Junkin</title>
+    <title>Github Thingamajig | Jukin</title>
     <meta name="description"
           content="Thingamajig is a noun used to refer to or address a person or thing whose name one has forgotten, does not know, or does not wish to mention.">
 
@@ -80,12 +80,13 @@
                 <g:form name="repo-vote-form" class="repo-vote-form" controller="github"
                         action="vote">
                     <div class="form-group">
-                        <textarea name="comments" class="form-control comments" placeholder="Tell us what you think"
+                        <textarea name="comment" class="form-control comments" placeholder="Tell us what you think"
                                   rows="7"
                                   cols="50" required=""></textarea>
-                        <input type="hidden" name="vote" class="vote-value" placeholder="Vote"/>
-                        <input type="hidden" name="id" class="repo-id" placeholder="id"/>
-                        <input type="hidden" name="name" class="repo-name" placeholder="id"/>
+                        <input type="hidden" name="voteValue" class="vote-value" placeholder="Vote Value"/>
+                        <input type="hidden" name="id" class="repo-id" placeholder="Repo ID"/>
+                        <input type="hidden" name="name" class="repo-name" placeholder="Repo Name"/>
+                        <input type="text" name="repoUrl" class="repo-url" placeholder="Repo URL"/>
                     </div>
                 </g:form>
                 <button class="vote-button down btn btn-danger btn-sm">

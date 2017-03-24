@@ -1,7 +1,7 @@
 <div class="repos-container">
     <ul>
         <g:each in="${repos}" var="repo" status="idx">
-            <li class="repo-data" data-id="${repo.id}" data-owner="${repo.owner.login}" data-name="${repo.name}">
+            <li class="repo-data" data-id="${repo.id}" data-owner="${repo.owner.login}" data-name="${repo.name}" data-url="${repo.url}">
                 <div class="flex space-between">
                     <h4>${repo.full_name} <span class="fa fa-star">&nbsp;${repo.stargazers_count}</span></h4>
                     <button type="button" class="btn btn-info" data-toggle="modal"
@@ -18,7 +18,7 @@
                 </span></p>
 
                 <p data-toggle="collapse" data-target="#comments-${idx}">Comments&nbsp;<span
-                        class="fa fa-plus-square-o"></span></p>
+                        class="fa fa-plus-square-o cursor"></span></p>
 
                 <div id="comments-${idx}" class="collapse">
                     <ul class="votes-list">
@@ -26,13 +26,13 @@
                             <g:each in="${repo.votes}" var="vote">
                                 <li>
                                     <p>
-                                        <g:if test="${vote.vote == 1}">
+                                        <g:if test="${vote.voteValue == 'LIKE'}">
                                             <span class="fa fa-thumbs-up green"></span>
                                         </g:if>
-                                        <g:elseif test="${vote.vote == -1}">
+                                        <g:elseif test="${vote.voteValue == 'DISLIKE'}">
                                             <span class="fa fa-thumbs-down red"></span>
                                         </g:elseif>
-                                        ${vote.comments ?: 'No need to comment my thumb says it all ;-)'}
+                                        ${vote.comment ?: 'No need to comment my thumb says it all ;-)'}
                                     </p>
                                 </li>
                             </g:each>

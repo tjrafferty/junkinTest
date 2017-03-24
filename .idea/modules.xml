@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/junkinTest.iml" filepath="$PROJECT_DIR$/junkinTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/junkinTest-grailsPlugins.iml" filepath="$PROJECT_DIR$/junkinTest-grailsPlugins.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jukinTest.iml" filepath="$PROJECT_DIR$/jukinTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jukinTest-grailsPlugins.iml" filepath="$PROJECT_DIR$/jukinTest-grailsPlugins.iml" />
     </modules>
   </component>
 </project>

@@ -16,7 +16,7 @@ $(document).ready(function (e) {
                 success: function (response) {
                     if (response.success) {
                         $('#voteModal').modal('toggle');
-                        var vote = response.vote.vote;
+                        var vote = response.vote.voteValue;
                         var comment = response.vote.comment;
                         var repo = $('*[data-id="' + response.id + '"]');
                         var voteList = repo.find('ul.votes-list');
@@ -24,7 +24,7 @@ $(document).ready(function (e) {
                         if (!comment) {
                             comment = 'No need to comment my thumb says it all ;-)'
                         }
-                        if (vote == 1) {
+                        if (vote == "LIKE") {
                             listData = "<p><span class='fa fa-thumbs-up green'></span>&nbsp;" + comment + "</p>";
                         } else {
                             listData = "<p><span class='fa fa-thumbs-down red'></span>&nbsp;" + comment + "</p>";
@@ -70,9 +70,9 @@ $(document).ready(function (e) {
             var $this = $(this);
             var vote = null
             if ($this.hasClass("up")) {
-                vote = 1
+                vote = "LIKE"
             } else if ($this.hasClass("down")) {
-                vote = -1
+                vote = "DISLIKE"
             }
             $('.vote-value').val(vote);
 
@@ -89,12 +89,14 @@ $(document).ready(function (e) {
             var owner = repo.data("owner");
             var name = repo.data("name");
             var repoId = repo.data("id");
+            var repoUrl = repo.data("url")
 
             //populate the textbox
             $(e.currentTarget).find('.modal-title').text(name);
             $(e.currentTarget).data("id", repoId)
             $(e.currentTarget).find('input[name="id"]').val(repoId);
             $(e.currentTarget).find('input[name="name"]').val(name);
+            $(e.currentTarget).find('input[name="repoUrl"]').val(repoUrl);
 
         })
 

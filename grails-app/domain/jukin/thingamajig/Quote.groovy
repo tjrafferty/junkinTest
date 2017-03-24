@@ -1,4 +1,4 @@
-package junkin.thingamajig
+package jukin.thingamajig
 
 class Quote {
 

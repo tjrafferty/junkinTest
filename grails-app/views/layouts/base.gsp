@@ -11,7 +11,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title><g:layoutTitle default="MyPetCerts"/></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" sizes="64x64" href="${assetPath(src: 'favicons/junkin-thingamajig-favicon.ico')}" type="image/png">
+    <link rel="icon" sizes="64x64" href="${assetPath(src: 'favicons/jukin-thingamajig-favicon.ico')}" type="image/png">
 
     <%--<link href='http://fonts.googleapis.com/css?family=Ubuntu:300, 400' rel='stylesheet' type='text/css'>--%>
 

@@ -1,8 +1,10 @@
-package junkin.thingamajig
+package jukin.thingamajig
+
+import jukin.thingamajig.Votes
 
 class Repo {
 
-    static hasMany = [votes: Vote]
+    static hasMany = [votes: Votes]
 
     String repoId
     String name
