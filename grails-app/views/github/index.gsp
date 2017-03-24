@@ -46,13 +46,6 @@
                     </span>
                 </li>
 
-                <li class="list-group-item flex space-between">
-                    <strong>Load Time</strong>
-                    <span class="text-right page-load-time">
-
-                    </span>
-                </li>
-
             </ul>
 
         </div>
@@ -86,7 +79,7 @@
                         <input type="hidden" name="voteValue" class="vote-value" placeholder="Vote Value"/>
                         <input type="hidden" name="id" class="repo-id" placeholder="Repo ID"/>
                         <input type="hidden" name="name" class="repo-name" placeholder="Repo Name"/>
-                        <input type="text" name="repoUrl" class="repo-url" placeholder="Repo URL"/>
+                        <input type="hidden" name="repoUrl" class="repo-url" placeholder="Repo URL"/>
                     </div>
                 </g:form>
                 <button class="vote-button down btn btn-danger btn-sm">

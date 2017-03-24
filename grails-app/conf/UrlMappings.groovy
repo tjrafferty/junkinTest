@@ -1,4 +1,5 @@
 import java.nio.file.AccessDeniedException
+import org.codehaus.groovy.grails.web.mapping.DefaultUrlMappingEvaluator
 
 class UrlMappings {
 
@@ -11,6 +12,7 @@ class UrlMappings {
 
         "/"(controller: "github", action: "index")
         "/latestCommit"(controller: "github", action: "getLatestCommit")
+        "/votes"(resources: "votes", excludes: ['delete'])
 
         //ERROR Handling
         "403"(controller: "error", action: "error403", exception: AccessDeniedException)

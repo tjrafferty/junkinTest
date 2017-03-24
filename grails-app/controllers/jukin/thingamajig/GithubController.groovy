@@ -2,8 +2,6 @@ package jukin.thingamajig
 
 import grails.converters.JSON
 import groovyx.net.http.ContentType
-import jukin.thingamajig.Repo
-import jukin.thingamajig.Votes
 
 class GithubController {
 

@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta name="layout" content="error">
-    <title>404 Error | Thingaajig</title>
+    <title>404 Error | Thingamajig</title>
 </head>
 
 <body data-page="errors-page">

@@ -14,12 +14,12 @@ class BasicApiFunctionalTests extends Specification {
 
     def setup() {
         rest = new RestBuilder()
-        baseUrl = System.getProperty('grails.functional.test.baseURL')
+        baseUrl = "http://localhost:8080"
     }
 
     def "test API vote listing"() {
         when:
-        def response = rest.get("${baseUrl}/votes") {
+        def response = rest.get("http://localhost:8080/votes") {
             accept JSON
         }
 
@@ -30,7 +30,7 @@ class BasicApiFunctionalTests extends Specification {
 
     def "test API does not respond to DELETE"() {
         when:
-        def response = rest.delete("${baseUrl}/votes/1") {
+        def response = rest.delete("http://localhost:8080/votes/1") {
             accept JSON
         }
 
@@ -42,7 +42,7 @@ class BasicApiFunctionalTests extends Specification {
 
     def "test Vote can be created"() {
         when:
-        def response = rest.post("${baseUrl}/votes") {
+        def response = rest.post("http://localhost:8080/votes") {
             header 'Content-Type', 'application/json'
             accept JSON
             json {
@@ -61,7 +61,7 @@ class BasicApiFunctionalTests extends Specification {
 
     def "test Vote can be fetched"() {
         when:
-        def response = rest.put("${baseUrl}/votes/1") {
+        def response = rest.put("http://localhost:8080/votes/1") {
             accept JSON
         }
 
@@ -77,7 +77,7 @@ class BasicApiFunctionalTests extends Specification {
     }
     def "test Vote can be updated"() {
         when:
-        def response = rest.put("${baseUrl}/votes/1") {
+        def response = rest.put("http://localhost:8080/votes/1") {
             accept JSON
             json {
                 name = 'baz'
