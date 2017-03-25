@@ -12,7 +12,7 @@ class UrlMappings {
 
         "/"(controller: "github", action: "index")
         "/latestCommit"(controller: "github", action: "getLatestCommit")
-        "/votes"(resources: "votes", excludes: ['delete'])
+        "/votes"(resources: "votes")
 
         //ERROR Handling
         "403"(controller: "error", action: "error403", exception: AccessDeniedException)

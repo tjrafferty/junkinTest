@@ -5,6 +5,7 @@ class Votes {
     String comment
     String repoUrl
     String name
+    String repoId
 
     //Dates
     Date dateCreated

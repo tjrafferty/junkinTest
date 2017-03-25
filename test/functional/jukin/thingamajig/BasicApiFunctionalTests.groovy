@@ -2,26 +2,27 @@ package jukin.thingamajig
 
 import grails.converters.JSON
 import grails.plugins.rest.client.RestBuilder
+import grails.test.mixin.TestFor
+import groovyx.net.http.RESTClient
 import spock.lang.Shared
 import spock.lang.Specification
+import static org.springframework.http.HttpStatus.*
 
 class BasicApiFunctionalTests extends Specification {
     @Shared
-    RestBuilder rest
+    RESTClient rest
 
     @Shared
     String baseUrl
 
     def setup() {
-        rest = new RestBuilder()
-        baseUrl = "http://localhost:8080"
+        rest = new RESTClient()
+        baseUrl = "http://localhost:8080/"
     }
 
     def "test API vote listing"() {
         when:
-        def response = rest.get("http://localhost:8080/votes") {
-            accept JSON
-        }
+        def response = rest.get(uri: baseUrl, path: "votes")
 
         then: 'Expect a successful response'
         response.status == 200
@@ -30,65 +31,76 @@ class BasicApiFunctionalTests extends Specification {
 
     def "test API does not respond to DELETE"() {
         when:
-        def response = rest.delete("http://localhost:8080/votes/1") {
-            accept JSON
-        }
-
-        print response.body
+        def response = rest.delete(
+                uri: baseUrl,
+                path: "votes/1",
+                contentType: groovyx.net.http.ContentType.JSON
+        )
 
         then:
-        response.status == 405
+        assert response.responseData.status == 405
     }
 
     def "test Vote can be created"() {
-        when:
-        def response = rest.post("http://localhost:8080/votes") {
-            header 'Content-Type', 'application/json'
-            accept JSON
-            json {
-                name = 'foo'
-                repoUrl = 'bar'
-                voteValue = 'LIKE'
-                comment = 'This is cool...'
-            }
-        }
 
-        println response.body
+        given:
+        String newName = "foo"
+        String newRepoUrl = "bar"
+        String newVoteValue = "LIKE"
+        String newComment = "this is cool..."
+        String newRepoId = org.apache.commons.lang.RandomStringUtils.random(7, true, true)
+
+        when:
+        def response = rest.post(
+                uri: baseUrl,
+                path: "votes",
+                body: [name: newName, repoUrl: newRepoUrl, voteValue: newVoteValue, comment: newComment, repoId: newRepoId],
+                contentType: groovyx.net.http.ContentType.JSON
+        )
 
         then:
-        response.status == 201
+
+        assert response.responseData.status == 201
     }
 
     def "test Vote can be fetched"() {
-        when:
-        def response = rest.put("http://localhost:8080/votes/1") {
-            accept JSON
-        }
 
-        println response.body
+        given:
+        String newName = "afoo"
+        String newRepoUrl = "abar"
+        String newVoteValue = "LIKE"
+        String newComment = "athis is cool..."
+        String newRepoId = org.apache.commons.lang.RandomStringUtils.random(7, true, true)
+
+        def post = rest.post(
+                uri: baseUrl,
+                path: "votes",
+                body: [name: newName, repoUrl: newRepoUrl, voteValue: newVoteValue, comment: newComment, repoId: newRepoId],
+                contentType: groovyx.net.http.ContentType.JSON
+        )
+        when:
+        def response = rest.get(uri: baseUrl, path: "votes/${post.data.votes.id}")
 
         then:
-        response.status == 200
-        response.json.name == 'foo'
-        response.json.repoUrl == 'bar'
-        response.json.voteValue == 'LIKE'
-        response.json.comment == 'This is cool...'
+        assert response.status == 200
+        assert response.data.votes.name == newName
 
     }
+
     def "test Vote can be updated"() {
         when:
-        def response = rest.put("http://localhost:8080/votes/1") {
-            accept JSON
-            json {
-                name = 'baz'
-                voteValue = 'DISLIKE'
-            }
-        }
+        def response = rest.put(
+                uri: baseUrl,
+                path: "votes/1",
+                body: [name: "baz", voteValue: "DISLIKE", comment: "Im updated bro!"],
+                contentType: groovyx.net.http.ContentType.JSON
+        )
 
-        println response.body
         then:
+
         response.status == 200
-        response.json.name == 'baz'
-        response.json.voteValue == 'DISLIKE'
+        response.data.votes.name == 'baz'
+        response.data.votes.voteValue == 'DISLIKE'
+        response.data.votes.comment == 'Im updated bro!'
     }
 }

@@ -98,7 +98,7 @@ grails.hibernate.osiv.readonly = false
 
 environments {
     development {
-        grails.plugin.seed.autoSeed = true
+        grails.plugin.seed.autoSeed = false
         grails.logging.jul.usebridge = true
         //github.accessToken = "d318348158e0d012313d3d45f1c45ac272400ea9"
     }
@@ -115,6 +115,7 @@ log4j = {
     //appenders {
     //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     //}
+    debug 'grails.app'
 
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP

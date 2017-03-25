@@ -27,12 +27,10 @@ class GithubController {
         def reposTotal = response.total_count
 
         response.items.each { repo ->
-            def id = repo.id
-            def repository = Repo.findByRepoId(id)
-            if (repository) {
-                repo.votes = repository.votes
-            } else {
-                repo.votes = null
+            def id = repo.id, votes
+            votes = Votes.findAllByRepoId(id)
+            if (votes) {
+                repo.votes = votes
             }
 
             repos << repo
@@ -46,14 +44,14 @@ class GithubController {
 
     def vote() {
         def rtn = [success: false]
-        def vote = new Votes(comment: params.comment, voteValue: params.voteValue, repoUrl: params.repoUrl, name: params.name)
-        def repo = Repo.findByName(params.name)
-        if (!repo) {
-            repo = new Repo(name: params.name, repoId: params.id).save(flush: true)
-        }
-        repo.addToVotes(vote)
-        if (repo.save(flush: true)) {
-            rtn.id = repo.repoId
+        def vote = new Votes(comment: params.comment, voteValue: params.voteValue, repoUrl: params.repoUrl, name: params.name, repoId: params.id)
+        //def repo = Votes.findByName(params.name)
+        //if (!repo) {
+        //    repo = new Votes(name: params.name, repoId: params.id).save(flush: true)
+        //}
+        //repo.addToVotes(vote)
+        if (vote.save(flush: true)) {
+            rtn.id = vote.repoId
             rtn.vote = vote
             rtn.success = true
         }
